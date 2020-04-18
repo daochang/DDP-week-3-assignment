@@ -1,0 +1,53 @@
+---
+title: "Comparing US bank stock prices with a benchmark"
+Author: Lim Dao Chang
+output:
+  ioslides_presentation: default
+date: "4/18/2020"
+---
+
+```{r setup, message = FALSE, warning = FALSE, echo=FALSE}
+library(plotly)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+
+VFH <- read.csv("VFH.csv")
+VFH$Date <- as.POSIXct(VFH$Date)
+
+GS <- read.csv("GS.csv")
+GS$Date <- as.POSIXct(GS$Date)
+
+JPM <- read.csv("JPM.csv")
+JPM$Date <- as.POSIXct(JPM$Date)
+
+CG <- read.csv("CG.csv")
+CG$Date <- as.POSIXct(CG$Date)
+
+DF <- cbind(VFH[,c(1,5)], GS$Close, JPM$Close, CG$Close)
+colnames(DF) <- c("Date", "Benchmark Index", "Goldman Sachs", 
+                     "JP Morgan", "Citigroup")
+
+DF <- DF %>% gather(Stock, Price, -Date)
+```
+
+
+## Details of the comparison
+  
+### The plot on the next page compares the daily closing stock prices of several US banks with the Vanguard Financials Index over a 5-year period
+
+### 
+
+### The banks are:
+
+- Goldman Sachs
+- JP Morgan
+- Citigroup
+
+
+## Plot of closing prices from 18 Apr 2015 to 18 Apr 2020
+
+```{r message = FALSE, warning = FALSE, echo=FALSE}
+plot_ly(DF, x= ~Date, y= ~Price, color = ~Stock)
+```
+
